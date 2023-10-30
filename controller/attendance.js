@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { attendance } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -105,9 +104,9 @@ controller.insertData = async function(req, res) {
         latitude: dataInsert.latitude,
         longitude: dataInsert.longitude,
         reason: dataInsert.reason,
-        date_attend: dateNow(),
-        datetime_record: dateNow(),
-        datetime_created: dateNow()
+        date_attend: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_record: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -128,7 +127,7 @@ controller.insertData = async function(req, res) {
                 "reason": `${data.reason}`,
                 "date_attend": `${data.date_attend}`,
                 "datetime_record": `${data.datetime_record}`,
-                "datetime_created": `${data.datetime_create}`
+                "datetime_created": `${data.datetime_created}`
             },
             "response": resultErrors,
             "metaData": {
@@ -238,7 +237,7 @@ controller.update = async function(req, res) {
         longitude: dataInsert.longitude,
         reason: dataInsert.reason,
         date_attend: dataInsert.date_attend,
-        datetime_record: dateNow(),
+        datetime_record: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     // invalid
@@ -258,8 +257,7 @@ controller.update = async function(req, res) {
                 "longitude": `${data.longitude}`,
                 "reason": `${data.reason}`,
                 "date_attend": `${data.date_attend}`,
-                "datetime_record": `${data.datetime_record}`,
-                "datetime_created": `${data.datetime_create}`
+                "datetime_record": `${data.datetime_record}`
             },
             "response": resultErrors,
             "metaData": {
@@ -294,7 +292,6 @@ controller.update = async function(req, res) {
                                 "reason": `${data.reason}`,
                                 "date_attend": `${data.date_attend}`,
                                 "datetime_record": `${data.datetime_record}`,
-                                // "datetime_created": `${data.datetime_create}`
                             }
                         ],
                         "result": result

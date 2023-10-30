@@ -9,7 +9,7 @@ module.exports = {
         primaryKey: true
       },
       level_sname: {   
-        type: Sequelize.INTEGER(11),
+        type: Sequelize.STRING(10),
         allowNull: false
       },
       level_lname: {
@@ -25,11 +25,11 @@ module.exports = {
         allowNull: false,
         defaultValue: "ACT"
       },
-      createdAt: {
+      datetime_created: {
         allowNull: false,
         type: Sequelize.DATE
       },
-      updatedAt: {
+      datetime_edited: {
         allowNull: false,
         type: Sequelize.DATE
       }

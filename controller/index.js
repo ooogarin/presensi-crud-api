@@ -10,6 +10,7 @@ const controller = {
     account_level: require('./account_level'),
     account_device: require('./account_device'),
     locator: require('./locator'),
+    cuti: require('./cuti'),
 };
 
 module.exports = controller;

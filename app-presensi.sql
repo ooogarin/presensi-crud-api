@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 23, 2023 at 11:09 AM
+-- Generation Time: Oct 30, 2023 at 01:00 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `presensi`
+-- Database: `app-presensi`
 --
 
 -- --------------------------------------------------------
@@ -40,8 +40,8 @@ CREATE TABLE `account` (
   `imei` varchar(30) DEFAULT '-',
   `fcm_id` varchar(45) DEFAULT '-',
   `last_login` datetime DEFAULT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL
+  `datetime_created` datetime NOT NULL,
+  `datetime_edited` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -58,8 +58,8 @@ CREATE TABLE `account_device` (
   `release_vesion` varchar(5) NOT NULL DEFAULT '-',
   `sdk_version` varchar(5) NOT NULL DEFAULT '-',
   `app_version` varchar(20) NOT NULL,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL
+  `datetime_created` datetime NOT NULL,
+  `datetime_edited` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -70,12 +70,12 @@ CREATE TABLE `account_device` (
 
 CREATE TABLE `account_level` (
   `id_account_level` int(1) NOT NULL,
-  `level_sname` int(11) NOT NULL,
+  `level_sname` varchar(10) NOT NULL,
   `level_lname` varchar(100) NOT NULL,
   `level_description` varchar(100) NOT NULL,
   `status_account_level` enum('ACT','NACT') NOT NULL DEFAULT 'ACT',
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL
+  `datetime_created` datetime NOT NULL,
+  `datetime_edited` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -99,6 +99,20 @@ CREATE TABLE `attendance` (
   `date_attend` datetime DEFAULT NULL,
   `datetime_record` datetime NOT NULL,
   `datetime_created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cuti`
+--
+
+CREATE TABLE `cuti` (
+  `id_cuti` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `id_account` char(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `cuti_description` varchar(200) DEFAULT NULL,
+  `datetime_created` datetime NOT NULL,
+  `datetime_edited` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -246,6 +260,13 @@ ALTER TABLE `attendance`
   ADD KEY `fk_attendance-id_schedule` (`id_schedule`);
 
 --
+-- Indexes for table `cuti`
+--
+ALTER TABLE `cuti`
+  ADD PRIMARY KEY (`id_cuti`),
+  ADD KEY `fk_cuti-id_account` (`id_account`);
+
+--
 -- Indexes for table `division`
 --
 ALTER TABLE `division`
@@ -310,6 +331,12 @@ ALTER TABLE `account`
 ALTER TABLE `attendance`
   ADD CONSTRAINT `fk_attendance-id_account` FOREIGN KEY (`id_account`) REFERENCES `account` (`id_account`) ON DELETE NO ACTION ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_attendance-id_schedule` FOREIGN KEY (`id_schedule`) REFERENCES `schedule` (`id_schedule`) ON DELETE NO ACTION ON UPDATE CASCADE;
+
+--
+-- Constraints for table `cuti`
+--
+ALTER TABLE `cuti`
+  ADD CONSTRAINT `fk_cuti-id_account` FOREIGN KEY (`id_account`) REFERENCES `account` (`id_account`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Constraints for table `locator`

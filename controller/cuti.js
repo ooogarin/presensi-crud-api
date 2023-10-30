@@ -2,7 +2,7 @@
 var express = require('express');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
-const { shift_turn } = require('../models');
+const { cuti } = require('../models');
 const { validationResult } = require('express-validator');
 const moment = require('moment');
 
@@ -16,7 +16,7 @@ const controller = {};
 // get all
 controller.getAll = async function(req, res) {
     try {
-        await shift_turn.findAll()
+        await cuti.findAll()
         .then((result) => {
             // check empty result
             if (result.length == 0) {
@@ -67,7 +67,7 @@ controller.getById = async function(req, res) {
     }
 
     try {
-        await shift_turn.findByPk(id)
+        await cuti.findByPk(id)
         .then((data) => {
             res.status(200).json({
                 "response": data,
@@ -78,7 +78,7 @@ controller.getById = async function(req, res) {
                 }
             });
 
-            console.log(`Berhasil menampilkan data. Id: ${data.id_shift_turn}`);
+            console.log(`Berhasil menampilkan data. Id: ${data.id_cuti}`);
         });
     } catch (error) {
         console.error(`Error : ${error}`);
@@ -93,13 +93,11 @@ controller.insertData = async function(req, res) {
 
     // input data
     const data = {
-        id_shift_turn: uuidv4(),
-        turn_sname: dataInsert.turn_sname,
-        turn_lname: dataInsert.turn_lname,
-        turn_description: dataInsert.turn_description,
-        status_shift_turn: dataInsert.status_shift_turn,
+        id_cuti: uuidv4(),
+        id_account: dataInsert.id_account,
+        cuti_description: dataInsert.cuti_description,
         datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
-        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     // invalid
@@ -107,13 +105,11 @@ controller.insertData = async function(req, res) {
         // send response failed
         res.status(422).json({
             "insertValue": {
-                "id_shift_turn": `${data.id_shift_turn}`,
-                "turn_sname": `${data.turn_sname}`,
-                "turn_lname": `${data.turn_lname}`,
-                "turn_description": `${data.turn_description}`,
-                "status_shift_turn": `${data.status_shift_turn}`,
+                "id_cuti": `${data.id_division}`,
+                "id_account": `${data.id_account}`,
+                "cuti_description": `${data.cuti_description}`,
                 "datetime_created": `${data.datetime_created}`,
-                "datetime_edited": `${data.datetime_edited}`
+                "datetime_edited": `${data.datetime_edited}`,
             },
             "response": resultErrors,
             "metaData": {
@@ -128,7 +124,7 @@ controller.insertData = async function(req, res) {
 
     // input valid
     try {
-        await shift_turn.create(data)
+        await cuti.create(data)
         .then(() => {
             // send response success
             res.status(201).json({
@@ -172,7 +168,7 @@ controller.delete = async function(req, res) {
     }
 
     try {
-        await shift_turn.destroy({ where: { id_shift_turn: `${id}` } })
+        await cuti.destroy({ where: { id_cuti: `${id}` } })
         .then((rowsDeleted) => {
             if (rowsDeleted == 1) { // berhasil
                 res.status(200).json({
@@ -212,11 +208,9 @@ controller.update = async function(req, res) {
     
     // input data
     const data = {
-        turn_sname: dataInsert.turn_sname,
-        turn_lname: dataInsert.turn_lname,
-        turn_description: dataInsert.turn_description,
-        status_shift_turn: dataInsert.status_shift_turn,
-        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        id_account: dataInsert.id_account,
+        cuti_description: dataInsert.cuti_description,
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     // invalid
@@ -224,12 +218,10 @@ controller.update = async function(req, res) {
         // send response failed
         res.status(422).json({
             "insertValue": {
-                "id_shift_turn": `${id}`,
-                "turn_sname": `${data.turn_sname}`,
-                "turn_lname": `${data.turn_lname}`,
-                "turn_description": `${data.turn_description}`,
-                "status_shift_turn": `${data.status_shift_turn}`,
-                "datetime_edited": `${data.datetime_edited}`
+                "id_cuti": `${id}`,
+                "id_account": `${data.id_account}`,
+                "cuti_description": `${data.cuti_description}`,
+                "datetime_edited": `${data.datetime_edited}`,
             },
             "response": resultErrors,
             "metaData": {
@@ -244,19 +236,17 @@ controller.update = async function(req, res) {
 
     // input valid
     try {
-        await shift_turn.update(data, { where: { id_shift_turn: `${id}` } })
+        await cuti.update(data, { where: { id_cuti: `${id}` } })
         .then(([affectedRows, result]) => {
             if (affectedRows >= 1) { // berhasil
                 res.status(200).json({
                     "response": {
                         "data": [
                             {
-                                "id_shift_turn": `${id}`,
-                                "turn_sname": `${data.turn_sname}`,
-                                "turn_lname": `${data.turn_lname}`,
-                                "turn_description": `${data.turn_description}`,
-                                "status_shift_turn": `${data.status_shift_turn}`,
-                                "datetime_edited": `${data.datetime_edited}`
+                                "id_cuti": `${id}`,
+                                "id_account": `${data.id_account}`,
+                                "cuti_description": `${data.cuti_description}`,
+                                "datetime_edited": `${data.datetime_edited}`,
                             }
                         ],
                         "result": result

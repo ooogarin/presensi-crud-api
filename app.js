@@ -15,6 +15,7 @@ var shift_typeRouter = require('./routes/shift_type');
 var account_levelRouter = require('./routes/account_level');
 var account_deviceRouter = require('./routes/account_device');
 var locator = require('./routes/locator');
+var cuti = require('./routes/cuti');
 
 var app = express();
 
@@ -39,6 +40,7 @@ app.use('/shift_type', shift_typeRouter);
 app.use('/account_level', account_levelRouter);
 app.use('/account_device', account_deviceRouter);
 app.use('/locator', locator);
+app.use('/cuti', cuti);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

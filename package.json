@@ -1,9 +1,10 @@
 {
-  "name": "express-table",
+  "name": "express-api-web",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "seed": "node config/seeder.js"
   },
   "dependencies": {
     "body-parser": "^1.20.2",
@@ -15,6 +16,7 @@
     "express-validator": "^7.0.1",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
+    "moment": "^2.29.4",
     "morgan": "~1.9.1",
     "mysql2": "^3.6.2",
     "sequelize": "^6.33.0",

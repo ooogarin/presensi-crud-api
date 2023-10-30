@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { locator } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -97,13 +96,13 @@ controller.insertData = async function(req, res) {
         id_locator: uuidv4(),
         id_shifting: dataInsert.id_shifting,
         id_schedule: dataInsert.id_schedule,
-        locator_code: data.locator_code,
-        latitude: data.latitude,
-        langitude: data.langitude,
+        locator_code: dataInsert.locator_code,
+        latitude: dataInsert.latitude,
+        langitude: dataInsert.langitude,
         use_location: dataInsert.use_location,
         status_locator: dataInsert.status_locator,
-        datetime_created: dateNow(),
-        datetime_edited: dateNow()
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -221,12 +220,12 @@ controller.update = async function(req, res) {
     const data = {
         id_shifting: dataInsert.id_shifting,
         id_schedule: dataInsert.id_schedule,
-        locator_code: data.locator_code,
-        latitude: data.latitude,
-        langitude: data.langitude,
+        locator_code: dataInsert.locator_code,
+        latitude: dataInsert.latitude,
+        langitude: dataInsert.langitude,
         use_location: dataInsert.use_location,
         status_locator: dataInsert.status_locator,
-        datetime_edited: dateNow()
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -242,7 +241,6 @@ controller.update = async function(req, res) {
                 "langitude": `${data.langitude}`,
                 "use_location": `${data.use_location}`,
                 "status_locator": `${data.status_locator}`,
-                // "datetime_created": `${data.datetime_created}`,
                 "datetime_edited": `${data.datetime_edited}`,
             },
             "response": resultErrors,
@@ -273,7 +271,6 @@ controller.update = async function(req, res) {
                                 "langitude": `${data.langitude}`,
                                 "use_location": `${data.use_location}`,
                                 "status_locator": `${data.status_locator}`,
-                                // "datetime_created": `${data.datetime_created}`,
                                 "datetime_edited": `${data.datetime_edited}`
                             }
                         ],

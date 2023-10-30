@@ -9,7 +9,8 @@ const validations = {
     shift_type: require('./shift_type'),
     account_level: require('./account_level'),
     account_device: require('./account_device'),
-    locator: require('./locator')
+    locator: require('./locator'),
+    cuti: require('./cuti')
 };
 
 

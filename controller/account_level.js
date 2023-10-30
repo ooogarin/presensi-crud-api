@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { account_level } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -99,8 +98,8 @@ controller.insertData = async function(req, res) {
         level_lname: dataInsert.level_lname,
         level_description: dataInsert.level_description,
         status_account_level: dataInsert.status_account_level,
-        createdAt: dateNow(),
-        updatedAt: dateNow()
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -113,8 +112,8 @@ controller.insertData = async function(req, res) {
                 "level_lname": `${data.level_lname}`,
                 "level_description": `${data.level_description}`,
                 "status_account_level": `${data.status_account_level}`,
-                "createdAt": `${data.createdAt}`,
-                "updatedAt": `${data.updatedAt}`
+                "datetime_created": `${data.datetime_created}`,
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -216,7 +215,7 @@ controller.update = async function(req, res) {
         level_lname: dataInsert.level_lname,
         level_description: dataInsert.level_description,
         status_account_level: dataInsert.status_account_level,
-        updatedAt: dateNow()
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -229,8 +228,7 @@ controller.update = async function(req, res) {
                 "level_lname": `${data.level_lname}`,
                 "level_description": `${data.level_description}`,
                 "status_account_level": `${data.status_account_level}`,
-                // "createdAt": `${data.createdAt}`,
-                "updatedAt": `${data.updatedAt}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -257,8 +255,7 @@ controller.update = async function(req, res) {
                                 "level_lname": `${data.level_lname}`,
                                 "level_description": `${data.level_description}`,
                                 "status_account_level": `${data.status_account_level}`,
-                                // "createdAt": `${data.createdAt}`,
-                                "updatedAt": `${data.updatedAt}`
+                                "datetime_edited": `${data.datetime_edited}`
                             }
                         ],
                         "result": result

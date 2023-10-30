@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { shift_type } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -99,8 +98,8 @@ controller.insertData = async function(req, res) {
         type_lname: dataInsert.type_lname,
         type_description: dataInsert.type_description,
         status_shift_type: dataInsert.status_shift_type,
-        datetime_created: dateNow(),
-        datetime_updated: dateNow()
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_updated: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -217,7 +216,7 @@ controller.update = async function(req, res) {
         type_lname: dataInsert.type_lname,
         type_description: dataInsert.type_description,
         status_shift_type: dataInsert.status_shift_type,
-        datetime_updated: dateNow()
+        datetime_updated: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -230,7 +229,6 @@ controller.update = async function(req, res) {
                 "type_lname": `${data.type_lname}`,
                 "type_description": `${data.type_description}`,
                 "status_shift_type": `${data.status_shift_type}`,
-                // "datetime_created": `${data.datetime_created}`,
                 "datetime_updated": `${data.datetime_updated}`
             },
             "response": resultErrors,
@@ -258,7 +256,6 @@ controller.update = async function(req, res) {
                                 "type_lname": `${data.type_lname}`,
                                 "type_description": `${data.type_description}`,
                                 "status_shift_type": `${data.status_shift_type}`,
-                                // "datetime_created": `${data.datetime_created}`,
                                 "datetime_updated": `${data.datetime_updated}`
                             }
                         ],

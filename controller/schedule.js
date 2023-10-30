@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { schedule } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -99,8 +98,8 @@ controller.insertData = async function(req, res) {
         id_shifting: dataInsert.id_shifting,
         shift_schedule: dataInsert.shift_schedule,
         status_schedule: dataInsert.status_schedule,
-        datetime_created: dateNow(),
-        datetime_updated: dateNow()
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -114,7 +113,7 @@ controller.insertData = async function(req, res) {
                 "shift_schedule": `${data.shift_schedule}`,
                 "status_schedule": `${data.status_schedule}`,
                 "datetime_created": `${data.datetime_created}`,
-                "datetime_updated": `${data.datetime_update}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -217,7 +216,7 @@ controller.update = async function(req, res) {
         id_shifting: dataInsert.id_shifting,
         shift_schedule: dataInsert.shift_schedule,
         status_schedule: dataInsert.status_schedule,
-        datetime_updated: dateNow()
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -230,8 +229,7 @@ controller.update = async function(req, res) {
                 "id_shifting": `${data.id_shifting}`,
                 "shift_schedule": `${data.shift_schedule}`,
                 "status_schedule": `${data.status_schedule}`,
-                // "datetime_created": `${data.datetime_created}`,
-                "datetime_updated": `${data.datetime_update}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -258,8 +256,7 @@ controller.update = async function(req, res) {
                                 "id_shifting": `${data.id_shifting}`,
                                 "shift_schedule": `${data.shift_schedule}`,
                                 "status_schedule": `${data.status_schedule}`,
-                                // "datetime_created": `${data.datetime_created}`,
-                                "datetime_updated": `${data.datetime_update}`
+                                "datetime_edited": `${data.datetime_edited}`
                             }
                         ],
                         "result": result

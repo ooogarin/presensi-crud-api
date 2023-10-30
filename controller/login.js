@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const { account } = require('../models');
 const { Op } = require('sequelize');
+const { Result } = require('express-validator');
 require('dotenv').config();
 
 // express
@@ -27,25 +28,24 @@ controller.login = async (req, res) => {
                 { email: `${username}` }
             ]
         }
+    })
+    .then((data) => {
+        return data;
     });
 
-    // check email/username
-    if (!checkUsername) {
-        return res.send("Username atau password salah");
-    }
-
-    // check password
-    if (password != checkUsername.password) {
+    // username not exist OR wrong password
+    if (!checkUsername || password != checkUsername.password) {
         return res.send("Username atau password salah");
     }
 
     // create token
     const secretKey = process.env.JWT_SECRET_KEY; // secret key JWT token
-    const token = jwt.sign({ username: username }, secretKey, { expiresIn: "5m" });
+    const token = jwt.sign({ username: username, account_level: checkUsername.id_account_level }, secretKey, { expiresIn: "15m" });
     
     res.json({
         message: "Login berhasil",
-        token: token
+        token: token,
+        level: checkUsername.id_account_level,
     });
 
 }

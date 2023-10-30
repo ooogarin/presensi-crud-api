@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { division } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -99,8 +98,8 @@ controller.insertData = async function(req, res) {
         division_lname: dataInsert.division_lname,
         division_description: dataInsert.division_description,
         status_division: dataInsert.status_division,
-        datetime_created: dateNow(),
-        datetime_updated: dateNow(),
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -114,7 +113,7 @@ controller.insertData = async function(req, res) {
                 "division_description": `${data.division_description}`,
                 "status_division": `${data.status_division}`,
                 "datetime_created": `${data.datetime_created}`,
-                "datetime_updated": `${data.datetime_updated}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -217,7 +216,7 @@ controller.update = async function(req, res) {
         division_lname: dataInsert.division_lname,
         division_description: dataInsert.division_description,
         status_division: dataInsert.status_division,
-        datetime_updated: dateNow(),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
     };
 
     // invalid
@@ -230,8 +229,7 @@ controller.update = async function(req, res) {
                 "division_lname": `${data.division_lname}`,
                 "division_description": `${data.division_description}`,
                 "status_division": `${data.status_division}`,
-                // "datetime_created": `${data.datetime_created}`,
-                "datetime_updated": `${data.datetime_updated}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -258,8 +256,7 @@ controller.update = async function(req, res) {
                                 "division_lname": `${data.division_lname}`,
                                 "division_description": `${data.division_description}`,
                                 "status_division": `${data.status_division}`,
-                                // "datetime_created": `${data.datetime_created}`,
-                                "datetime_updated": `${data.datetime_updated}`
+                                "datetime_edited": `${data.datetime_edited}`
                             }
                         ],
                         "result": result

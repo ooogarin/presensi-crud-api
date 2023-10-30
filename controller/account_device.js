@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { account_device } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -102,8 +101,8 @@ controller.insertData = async function(req, res) {
         release_version: dataInsert.release_version,
         sdk_version: dataInsert.sdk_version,
         app_version: dataInsert.app_version,
-        createdAt: dateNow(),
-        updatedAt: dateNow()
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -118,8 +117,8 @@ controller.insertData = async function(req, res) {
                 "release_version": `${data.release_version}`,
                 "sdk_version": `${data.sdk_version}`,
                 "app_version": `${data.app_version}`,
-                "createdAt": `${data.createdAt}`,
-                "updatedAt": `${data.updatedAt}`
+                "datetime_created": `${data.datetime_created}`,
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -134,7 +133,7 @@ controller.insertData = async function(req, res) {
 
     // input valid
     try {
-        await account.create(data)
+        await account_device.create(data)
         .then(() => {
             res.status(201).json({
                 "response": {
@@ -223,7 +222,7 @@ controller.update = async function(req, res) {
         release_version: dataInsert.release_version,
         sdk_version: dataInsert.sdk_version,
         app_version: dataInsert.app_version,
-        updatedAt: dateNow()
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -238,8 +237,7 @@ controller.update = async function(req, res) {
                 "release_version": `${data.release_version}`,
                 "sdk_version": `${data.sdk_version}`,
                 "app_version": `${data.app_version}`,
-                // "createdAt": `${data.createdAt}`,
-                "updatedAt": `${data.updatedAt}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -254,7 +252,7 @@ controller.update = async function(req, res) {
 
     // input valid
     try {
-        await account_device.update(data, { where: { id_account: `${id}` } })
+        await account_device.update(data, { where: { id_device_account: `${id}` } })
         .then(([affectedRows, result]) => {
             if (affectedRows >= 1) { // berhasil
                 res.status(200).json({
@@ -268,8 +266,7 @@ controller.update = async function(req, res) {
                                 "release_version": `${data.release_version}`,
                                 "sdk_version": `${data.sdk_version}`,
                                 "app_version": `${data.app_version}`,
-                                // "createdAt": `${data.createdAt}`,
-                                "updatedAt": `${data.updatedAt}`
+                                "datetime_edited": `${data.datetime_edited}`
                             }
                         ],
                         "result": result

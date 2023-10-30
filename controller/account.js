@@ -4,14 +4,13 @@ const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
 const { account } = require('../models');
 const { validationResult } = require('express-validator');
-const dateNow = require('../config/dateNow');
+const moment = require('moment');
 
 // express
 const app = express();
 app.use(bodyParser.json());
 
 const controller = {};
-
 
 
 // get all
@@ -107,8 +106,8 @@ controller.insertData = async function(req, res) {
         imei: dataInsert.imei,
         fcm_id: dataInsert.fcm_id,
         last_login: dataInsert.last_login,
-        createdAt: dateNow(),
-        updatedAt: dateNow()
+        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -128,8 +127,8 @@ controller.insertData = async function(req, res) {
                 "imei": `${data.imei}`,
                 "fcm_id": `${data.fcm_id}`,
                 "last_login": `${data.last_login}`,
-                "createdAt": `${data.createdAt}`,
-                "updatedAt": `${data.updatedAt}`
+                "datetime_created": `${data.datetime_created}`,
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -162,7 +161,7 @@ controller.insertData = async function(req, res) {
             console.log("Berhasil menambahkan data");
         });
     } catch (error) {
-        console.error(`Error : ${error}`);
+        console.error(`Errora : ${error}`);
     }
 
 };
@@ -238,8 +237,10 @@ controller.update = async function(req, res) {
         imei: dataInsert.imei,
         fcm_id: dataInsert.fcm_id,
         last_login: dataInsert.last_login,
-        updatedAt: dateNow()
+        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
     };
+
+    console.log("ppp = " + data.datetime_edited);
 
     // invalid
     if (!resultErrors.isEmpty()) {
@@ -258,8 +259,7 @@ controller.update = async function(req, res) {
                 "imei": `${data.imei}`,
                 "fcm_id": `${data.fcm_id}`,
                 "last_login": `${data.last_login}`,
-                // "createdAt": `${data.createdAt}`,
-                "updatedAt": `${data.updatedAt}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
@@ -293,8 +293,7 @@ controller.update = async function(req, res) {
                                 "imei": `${data.imei}`,
                                 "fcm_id": `${data.fcm_id}`,
                                 "last_login": `${data.last_login}`,
-                                // "createdAt": `${data.createdAt}`,
-                                "updatedAt": `${data.updatedAt}`
+                                "datetime_edited": `${data.datetime_edited}`
                             }
                         ],
                         "result": result

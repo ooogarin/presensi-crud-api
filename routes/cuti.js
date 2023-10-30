@@ -8,31 +8,31 @@ const authLogin = require('../config/middlewares/isLogin');
 // GET - all
 router.get('/',
     authLogin,
-controller.account_level.getAll);
+controller.cuti.getAll);
 
 // GET - by id
 router.get('/:id',
     authLogin,
-    validationRules.account_level.getDataById,
-controller.account_level.getById);
+    validationRules.cuti.getDataById,
+controller.cuti.getById);
 
 // POST
 router.post('/',
     authLogin,
-    validationRules.account_level.insertData,
-controller.account_level.insertData);
+    validationRules.cuti.insertData,
+controller.cuti.insertData);
 
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.account_level.deleteById,
-controller.account_level.delete);
+    validationRules.cuti.deleteById,
+controller.cuti.delete);
 
 // PUT
 router.put('/:id',
     authLogin,
-    validationRules.account_level.updateById,
-controller.account_level.update);
+    validationRules.cuti.updateById,
+controller.cuti.update);
 
 
 

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class account_level extends Model {
+  class cuti extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,28 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  account_level.init({
-    id_account_level: {
-      type: DataTypes.INTEGER(1),
+  cuti.init({
+    id_cuti: {
+      type: DataTypes.UUID,
       allowNull: false,
       primaryKey: true
     },
-    level_sname: {   
-      type: DataTypes.STRING(10),
-      allowNull: false
+    id_account: {
+      type: DataTypes.UUID
     },
-    level_lname: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    },
-    level_description: {
-      type: DataTypes.STRING(100),
-      allowNull: false
-    }, 
-    status_account_level: {
-      type: DataTypes.ENUM("ACT", "NACT"),
-      allowNull: false,
-      defaultValue: "ACT"
+    cuti_description: {
+      type: DataTypes.STRING(200)
     },
     datetime_created: {
       allowNull: false,
@@ -46,9 +35,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     sequelize,
-    modelName: 'account_level',
+    modelName: 'cuti',
     freezeTableName: true,
     timestamps: false
   });
-  return account_level;
+  return cuti;
 };
