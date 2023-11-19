@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // from schedule
+      locator.belongsTo(models.schedule, {
+        foreignKey: 'id_schedule',
+        as: 'schedule'
+      });
     }
   }
   locator.init({

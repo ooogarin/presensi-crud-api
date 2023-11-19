@@ -17,6 +17,9 @@ module.exports = {
         latitude: "-",
         longitude: "-",
         reason: "attendance-reason",
+        attendance_start: "00:00:00",
+        attendance_finish: "00:00:00",
+        status_attendance: "-",
         date_attend: "0000-00-00 00:00:00",
         datetime_record: "0000-00-00 00:00:00",
         datetime_created: "0000-00-00 00:00:00"
@@ -33,6 +36,9 @@ module.exports = {
         latitude: "-",
         longitude: "-",
         reason: "attendance-reason",
+        attendance_start: "00:00:00",
+        attendance_finish: "00:00:00",
+        status_attendance: "-",
         date_attend: "0000-00-00 00:00:00",
         datetime_record: "0000-00-00 00:00:00",
         datetime_created: "0000-00-00 00:00:00"
@@ -49,6 +55,9 @@ module.exports = {
         latitude: "-",
         longitude: "-",
         reason: "attendance-reason",
+        attendance_start: "00:00:00",
+        attendance_finish: "00:00:00",
+        status_attendance: "-",
         date_attend: "0000-00-00 00:00:00",
         datetime_record: "0000-00-00 00:00:00",
         datetime_created: "0000-00-00 00:00:00"

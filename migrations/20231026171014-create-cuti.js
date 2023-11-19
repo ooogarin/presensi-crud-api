@@ -11,8 +11,31 @@ module.exports = {
       id_account: {
         type: Sequelize.UUID
       },
+      cuti_start: {
+        type: Sequelize.DATEONLY,
+        defaultValue: null
+      },
+      cuti_end: {
+        type: Sequelize.DATEONLY,
+        defaultValue: null
+      },
+      cuti_type: {
+        type: Sequelize.STRING(30),
+        allowNull: false,
+        defaultValue: "-"
+      },
       cuti_description: {
-        type: Sequelize.STRING(200)
+        type: Sequelize.TEXT,
+        defaultValue: '-'
+      },
+      cuti_response: {
+        type: Sequelize.TEXT,
+      defaultValue: '-'
+      },
+      status_cuti: {
+        type: Sequelize.ENUM("WAIT", "ACC", "REJECT"),
+        allowNull: false,
+        defaultValue: "WAIT"
       },
       datetime_created: {
         allowNull: false,

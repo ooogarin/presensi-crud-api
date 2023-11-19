@@ -40,9 +40,13 @@ controller.login = async (req, res) => {
 
     // create token
     const secretKey = process.env.JWT_SECRET_KEY; // secret key JWT token
-    const token = jwt.sign({ username: username, account_level: checkUsername.id_account_level }, secretKey, { expiresIn: "15m" });
+    const data = {
+        id_account: checkUsername.id_account,
+        account_level: checkUsername.id_account_level
+    }
+    const token = jwt.sign({ data }, secretKey, { expiresIn: "30m" });
     
-    res.json({
+    res.status(200).json({
         message: "Login berhasil",
         token: token,
         level: checkUsername.id_account_level,

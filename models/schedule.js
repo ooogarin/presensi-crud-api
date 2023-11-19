@@ -3,17 +3,37 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class schedules extends Model {
+  class schedule extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // from shifting
+      schedule.belongsTo(models.shifting, {
+        foreignKey: 'id_shifting',
+        as: 'shifting'
+      });
+
+      // from account
+      schedule.belongsTo(models.account, {
+        foreignKey: 'id_account',
+        as: 'account'
+      });
+
+      // to attendance
+      schedule.hasMany(models.attendance, {
+        foreignKey: 'id_schedule'
+      });
+
+      // to locator
+      schedule.hasOne(models.locator, {
+        foreignKey: 'id_locator'
+      });
     }
   }
-  schedules.init({
+  schedule.init({
     id_schedule: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -28,7 +48,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     shift_schedule: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
       allowNull: false
     },
     status_schedule: {
@@ -50,5 +70,5 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     timestamps: false
   });
-  return schedules;
+  return schedule;
 };

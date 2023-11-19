@@ -10,12 +10,6 @@ router.get('/',
     authLogin,
 controller.shift_turn.getAll);
 
-// GET - by id
-router.get('/:id',
-    authLogin,
-    validationRules.shift_turn.getDataById,
-controller.shift_turn.getById);
-
 // POST
 router.post('/',
     authLogin,
@@ -25,7 +19,7 @@ controller.shift_turn.insertData);
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.shift_turn.deleteById,
+    validationRules.shift_turn.findId,
 controller.shift_turn.delete);
 
 // PUT

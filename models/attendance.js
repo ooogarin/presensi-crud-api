@@ -3,17 +3,28 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class attendances extends Model {
+  class attendance extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // from account
+      attendance.belongsTo(models.account, {
+        foreignKey: 'id_account',
+        as: 'account'
+      });
+
+      // from schedule
+      attendance.belongsTo(models.schedule, {
+        foreignKey: 'id_schedule',
+        as: 'schedule'
+      });
+
     }
   }
-  attendances.init({
+  attendance.init({
     id_attendance: {
       type: DataTypes.UUID,
       allowNull: false,
@@ -61,11 +72,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     reason: {
       type: DataTypes.TEXT,
-      defaultValue: null
+      defaultValue: '-'
+    },
+    status_attendance: {
+      type: DataTypes.STRING(30),
+      defaultValue: "-"
     },
     date_attend: {
-      type: DataTypes.DATE,
-      allowNull: null
+      type: DataTypes.DATEONLY,
+      allowNull: false
     },
     datetime_record: {
       type: DataTypes.DATE,
@@ -81,5 +96,6 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     timestamps: false
   });
-  return attendances;
+  return attendance;
+
 };

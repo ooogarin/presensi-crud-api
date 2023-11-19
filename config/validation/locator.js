@@ -29,8 +29,6 @@ validationRules.insertData = [
     body('longitude').exists().trim().notEmpty().withMessage("longitude tidak sesuai"),
     body('use_location').exists().trim().notEmpty().withMessage("use_location tidak sesuai"),
     body('status_locator').exists().trim().notEmpty().withMessage("status_locator tidak sesuai"),
-    // body('datetime_created').exists().trim().notEmpty().withMessage("datetime_created tidak sesuai"),
-    // body('datetime_edited').exists().trim().notEmpty().withMessage("datetime_edited tidak sesuai")
 ];
 
 // DELETE - delete by id
@@ -54,8 +52,6 @@ validationRules.updateById = [
     body('longitude').exists().trim().notEmpty().withMessage("longitude tidak sesuai"),
     body('use_location').exists().trim().notEmpty().withMessage("use_location tidak sesuai"),
     body('status_locator').exists().trim().notEmpty().withMessage("status_locator tidak sesuai"),
-    // body('datetime_created').exists().trim().notEmpty().withMessage("datetime_created tidak sesuai"),
-    // body('datetime_edited').exists().trim().notEmpty().withMessage("datetime_edited tidak sesuai")
 ];
 
 module.exports = validationRules;

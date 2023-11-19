@@ -2,7 +2,7 @@
 var express = require('express');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
-const { account } = require('../models');
+const { account, role } = require('../models');
 const { validationResult } = require('express-validator');
 const moment = require('moment');
 
@@ -16,7 +16,16 @@ const controller = {};
 // get all
 controller.getAll = async function(req, res) {
     try {
-        await account.findAll()
+        await account.findAll({
+            attributes: ['id_account', 'lname_user', 'id_account_level', 'mobile', 'email', 'datetime_created', 'status_account'],
+            include: [
+                {
+                    model: role,
+                    as: 'role',
+                    attributes: ['role_sname']
+                }
+            ]
+        })
         .then((data) => {
             // check empty result
             if (data.length == 0) {
@@ -25,7 +34,7 @@ controller.getAll = async function(req, res) {
                     "metaData": {
                         "message": "Success",
                         "code": 201,
-                        "response_code": "12345"
+                        "response_code": "201"
                     }
                 });
 
@@ -36,7 +45,7 @@ controller.getAll = async function(req, res) {
                     "metaData": {
                         "message": "Success",
                         "code": 200,
-                        "response_code": "12345"
+                        "response_code": "200"
                     }
                 });
 
@@ -48,19 +57,19 @@ controller.getAll = async function(req, res) {
     }
 }
 
-// get by id
-controller.getById = async function(req, res) {
+// get detil
+controller.getDetilAccount = async function(req, res) {
     const id = req.params.id;
     const resultErrors = validationResult(req);
 
     // invalid
     if (!resultErrors.isEmpty()) {
-        res.json({
+        res.status(201).json({
             "response": resultErrors,
             "metaData": {
                 "message": "Data not found",
                 "code": 201,
-                "response_code": "12345"
+                "response_code": "201"
             }
         });
 
@@ -68,18 +77,25 @@ controller.getById = async function(req, res) {
     }
 
     try {
-        await account.findByPk(id)
+        await account.findByPk(id, {
+            attributes: ['id_account', 'lname_user', 'id_account_level', 'mobile', 'email', 'password', 'datetime_created', 'status_account', 'avatar', 'datetime_edited'],
+            include: [
+                {
+                    model: role,
+                    as: 'role',
+                    attributes: ['role_sname']
+                }
+            ]
+        })
         .then((data) => {
             res.status(200).json({
                 "response": data,
                 "metaData": {
                     "message": "Success",
                     "code": 200,
-                    "response_code": "12345"
+                    "response_code": "200"
                 }
             });
-
-            console.log(`Berhasil menampilkan data. Id: ${data.id_account}`);
         });
     } catch (error) {
         console.error(`Error : ${error}`);
@@ -95,19 +111,16 @@ controller.insertData = async function(req, res) {
     // input data
     const data = {
         id_account: uuidv4(),
-        name_user: dataInsert.name_user,
+        lname_user: dataInsert.name_user,
         mobile: dataInsert.mobile,
         email: dataInsert.email,
         password: dataInsert.password,
         avatar: dataInsert.avatar,
         id_account_level: dataInsert.id_account_level,
+        id_role: dataInsert.id_role, 
         status_account: dataInsert.status_account,
-        token: dataInsert.token,
-        imei: dataInsert.imei,
-        fcm_id: dataInsert.fcm_id,
-        last_login: dataInsert.last_login,
-        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
-        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        datetime_created: moment().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -116,25 +129,22 @@ controller.insertData = async function(req, res) {
         res.status(422).json({
             "insertValue": {
                 "id_account": uuidv4(),
-                "name_user": `${data.name_user}`,
+                "lname_user": `${data.name_user}`,
                 "mobile": `${data.mobile}`,
                 "email": `${data.email}`,
                 "password": `${data.password}`,
                 "avatar": `${data.avatar}`,
                 "id_account_level": `${data.id_account_level}`,
+                "id_role": `${data.id_role}`,
                 "status_account": `${data.status_account}`,
-                "token": `${data.token}`,
-                "imei": `${data.imei}`,
-                "fcm_id": `${data.fcm_id}`,
-                "last_login": `${data.last_login}`,
                 "datetime_created": `${data.datetime_created}`,
                 "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
                 "message": "Gagal menambahkan data",
-                "code": "422",
-                "response_code": "12345"
+                "code": 422,
+                "response_code": "422"
             }
         });
 
@@ -147,21 +157,20 @@ controller.insertData = async function(req, res) {
         .then(() => {
             res.status(201).json({
                 "response": {
-                    "data": [
-                        data
-                    ]
+                    "data": [ data ]
                 },
                 "metaData": {
                     "message": "Berhasil menambahkan data",
-                    "code": "201",
-                    "response_code": "12345"
+                    "code": 201,
+                    "response_code": "201"
                 }
             });
             
             console.log("Berhasil menambahkan data");
         });
     } catch (error) {
-        console.error(`Errora : ${error}`);
+        console.error(`Error : ${error}`);
+        res.send(error);
     }
 
 };
@@ -173,12 +182,12 @@ controller.delete = async function(req, res) {
 
     // invalid/id not found
     if (!resultErrors.isEmpty()) {
-        res.json({
+        res.status(201).json({
             "response": resultErrors,
             "metaData": {
                 "message": "Tidak dapat menghapus data",
                 "code": 201,
-                "response_code": "12345"
+                "response_code": "201"
             }
         });
 
@@ -193,8 +202,8 @@ controller.delete = async function(req, res) {
                     "response": [],
                     "metaData": {
                         "message": "Berhasil menghapus data",
-                        "code": "200",
-                        "response_code": "12345"
+                        "code": 200,
+                        "response_code": "200"
                     }
                 });
 
@@ -204,8 +213,8 @@ controller.delete = async function(req, res) {
                     "response": [],
                     "metaData": {
                         "message": "Gagal menghapus data",
-                        "code": "200",
-                        "response_code": "12345"
+                        "code": 200,
+                        "response_code": "200"
                     }
                 });
 
@@ -226,21 +235,16 @@ controller.update = async function(req, res) {
     
     // input data
     const data = {
-        name_user: dataInsert.name_user,
+        lname_user: dataInsert.name_user,
         mobile: dataInsert.mobile,
         email: dataInsert.email,
         password: dataInsert.password,
         avatar: dataInsert.avatar,
         id_account_level: dataInsert.id_account_level,
+        id_role: dataInsert.id_role, 
         status_account: dataInsert.status_account,
-        token: dataInsert.token,
-        imei: dataInsert.imei,
-        fcm_id: dataInsert.fcm_id,
-        last_login: dataInsert.last_login,
-        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        datetime_edited: moment().format('YYYY-MM-DD HH:mm:ss')
     };
-
-    console.log("ppp = " + data.datetime_edited);
 
     // invalid
     if (!resultErrors.isEmpty()) {
@@ -254,18 +258,15 @@ controller.update = async function(req, res) {
                 "password": `${data.password}`,
                 "avatar": `${data.avatar}`,
                 "id_account_level": `${data.id_account_level}`,
+                "id_role": `${data.id_role}`,
                 "status_account": `${data.status_account}`,
-                "token": `${data.token}`,
-                "imei": `${data.imei}`,
-                "fcm_id": `${data.fcm_id}`,
-                "last_login": `${data.last_login}`,
                 "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
                 "message": "Gagal mengubah data",
-                "code": "422",
-                "response_code": "12345"
+                "code": 422,
+                "response_code": "422"
             }
         });
 
@@ -288,10 +289,8 @@ controller.update = async function(req, res) {
                                 "password": `${data.password}`,
                                 "avatar": `${data.avatar}`,
                                 "id_account_level": `${data.id_account_level}`,
+                                "id_role": `${data.id_role}`,
                                 "status_account": `${data.status_account}`,
-                                "token": `${data.token}`,
-                                "imei": `${data.imei}`,
-                                "fcm_id": `${data.fcm_id}`,
                                 "last_login": `${data.last_login}`,
                                 "datetime_edited": `${data.datetime_edited}`
                             }
@@ -301,7 +300,7 @@ controller.update = async function(req, res) {
                     "metaData": {
                         "message": "Berhasil mengubah data",
                         "code": 200,
-                        "response_code": "12345"
+                        "response_code": "200"
                     }
                 });
 
@@ -312,7 +311,7 @@ controller.update = async function(req, res) {
                     "metaData": {
                         "message": "Gagal mengubah data",
                         "code": 422,
-                        "response_code": "12345"
+                        "response_code": "422"
                     }
                 });
 

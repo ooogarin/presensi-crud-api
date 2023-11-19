@@ -10,7 +10,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // to shifting
+      shift_type.hasMany(models.shifting, {
+        foreignKey: 'id_shift_type'
+      });
     }
   }
   shift_type.init({

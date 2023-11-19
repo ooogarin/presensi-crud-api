@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { schedule } = require('../../models');
+const { locator, schedule } = require('../../models');
 const { body, param } = require('express-validator');
 
 // express
@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 const validationRules = {};
 
 
-// GET - get by id
-validationRules.getDataById = [
+// GET - find id
+validationRules.findId = [
     param('id').custom(async (id) => {
-        const data = await schedule.findByPk(id);
+        const data = await locator.findByPk(id);
         if (data == null) {
             return Promise.reject("Data not found");
         }
@@ -22,20 +22,15 @@ validationRules.getDataById = [
 
 // POST - insert data
 validationRules.insertData = [
-    body('id_account').exists().trim().notEmpty().withMessage("id_account tidak sesuai"),
-    body('id_shifting').exists().trim().notEmpty().withMessage("id_shifting tidak sesuai"),
     body('shift_schedule').exists().trim().notEmpty().withMessage("shift_schedule tidak sesuai"),
+    body('id_shift_turn').exists().trim().notEmpty().withMessage("id_shift_turn tidak sesuai"),
+    body('id_shift_type').exists().trim().notEmpty().withMessage("id_shift_type tidak sesuai"),
+    body('id_division').exists().trim().notEmpty().withMessage("id_division tidak sesuai"),
+    body('id_account').exists().trim().notEmpty().withMessage("id_account tidak sesuai"),
     body('status_schedule').exists().trim().notEmpty().withMessage("status_schedule tidak sesuai"),
-    // body('datetime_created').exists().trim().notEmpty().withMessage("datetime_created tidak sesuai"),
-    // body('datetime_edited').exists().trim().notEmpty().withMessage("datetime_edited tidak sesuai")
-];
-
-// DELETE - delete by id
-validationRules.deleteById = [
-    param('id').custom(async (id) => {
-        const data = await schedule.findByPk(id);
-        if (data == null) return Promise.reject("Data not found");
-    })
+    body('use_location').exists().trim().notEmpty().withMessage("use_location tidak sesuai"),
+    body('latitude').exists().trim().notEmpty().withMessage("latitude tidak sesuai"),
+    body('longitude').exists().trim().notEmpty().withMessage("longitude tidak sesuai")
 ];
 
 // PUT - update by id
@@ -44,12 +39,25 @@ validationRules.updateById = [
         const data = await schedule.findByPk(id);
         if (data == null) return Promise.reject("Data not found");
     }),
-    body('id_account').exists().trim().notEmpty().withMessage("id_account tidak sesuai"),
-    body('id_shifting').exists().trim().notEmpty().withMessage("id_shifting tidak sesuai"),
     body('shift_schedule').exists().trim().notEmpty().withMessage("shift_schedule tidak sesuai"),
+    body('id_shift_turn').exists().trim().notEmpty().withMessage("id_shift_turn tidak sesuai"),
+    body('id_shift_type').exists().trim().notEmpty().withMessage("id_shift_type tidak sesuai"),
+    body('id_division').exists().trim().notEmpty().withMessage("id_division tidak sesuai"),
+    body('id_account').exists().trim().notEmpty().withMessage("id_account tidak sesuai"),
     body('status_schedule').exists().trim().notEmpty().withMessage("status_schedule tidak sesuai"),
-    // body('datetime_created').exists().trim().notEmpty().withMessage("datetime_created tidak sesuai"),
-    // body('datetime_edited').exists().trim().notEmpty().withMessage("datetime_edited tidak sesuai")
+    body('use_location').exists().trim().notEmpty().withMessage("use_location tidak sesuai"),
+    body('latitude').exists().trim().notEmpty().withMessage("latitude tidak sesuai"),
+    body('longitude').exists().trim().notEmpty().withMessage("longitude tidak sesuai")
+];
+
+// GET - delete by id
+validationRules.delete = [
+    param('id').custom(async (id) => {
+        const data = await schedule.findByPk(id);
+        if (data == null) {
+            return Promise.reject("Data not found");
+        }
+    })
 ];
 
 module.exports = validationRules;

@@ -7,32 +7,34 @@ const authLogin = require('../config/middlewares/isLogin');
 
 // GET - all
 router.get('/',
-    authLogin,
+    // authLogin,
 controller.account.getAll);
 
 // GET - by id
 router.get('/:id',
-    authLogin,
-    validationRules.account.getDataById,
-controller.account.getById);
+    // authLogin,
+    validationRules.account.findId,
+controller.account.getDetilAccount);
 
 // POST
 router.post('/',
-    authLogin,
+    // authLogin,
     validationRules.account.insertData,
 controller.account.insertData);
 
 // DELETE - by id
 router.delete('/:id',
-    authLogin,
-    validationRules.account.deleteById,
+    // authLogin,
+    validationRules.account.findId,
 controller.account.delete);
 
 // PUT
 router.put('/:id',
-    authLogin,
+    // authLogin,
     validationRules.account.updateById,
 controller.account.update);
+
+
 
 
 

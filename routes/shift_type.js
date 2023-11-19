@@ -10,12 +10,6 @@ router.get('/',
     authLogin,
 controller.shift_type.getAll);
 
-// GET - by id
-router.get('/:id',
-    authLogin,
-    validationRules.shift_type.getDataById,
-controller.shift_type.getById);
-
 // POST
 router.post('/',
     authLogin,
@@ -25,7 +19,7 @@ controller.shift_type.insertData);
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.shift_type.deleteById,
+    validationRules.shift_type.findId,
 controller.shift_type.delete);
 
 // PUT

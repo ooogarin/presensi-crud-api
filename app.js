@@ -15,7 +15,15 @@ var shift_typeRouter = require('./routes/shift_type');
 var account_levelRouter = require('./routes/account_level');
 var account_deviceRouter = require('./routes/account_device');
 var locator = require('./routes/locator');
-var cuti = require('./routes/cuti');
+var cuti_request = require('./routes/cuti_request');
+var cuti_type = require('./routes/cuti_type');
+var dashboard = require('./routes/dashboard');
+var forget_password = require('./routes/forget_password');
+var profile = require('./routes/profile');
+var role = require('./routes/role');
+// mobile
+var m_dashboard = require('./routes/m_dashboard');
+var m_attendance = require('./routes/m_attendance');
 
 var app = express();
 
@@ -40,7 +48,19 @@ app.use('/shift_type', shift_typeRouter);
 app.use('/account_level', account_levelRouter);
 app.use('/account_device', account_deviceRouter);
 app.use('/locator', locator);
-app.use('/cuti', cuti);
+app.use('/cuti_request', cuti_request);
+app.use('/cuti_type', cuti_type);
+app.use('/dashboard', dashboard);
+app.use('/forget_password', forget_password);
+app.use('/profile', profile);
+app.use('/role', role);
+// mobile
+app.use('/mobile-dashboard', m_dashboard);
+app.use('/mobile-pre-attendance', m_attendance);
+
+app.use('/', (req, res) => {
+  res.send("404, request not found");
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

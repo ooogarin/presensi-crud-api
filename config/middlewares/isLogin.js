@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 
 const isLogin = (req, res, next) => {
-    return next();
+    return next(); // for debug/testing
     const secretKey = process.env.JWT_SECRET_KEY;
     
     // invalid token

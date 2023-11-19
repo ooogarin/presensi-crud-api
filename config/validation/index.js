@@ -10,7 +10,10 @@ const validations = {
     account_level: require('./account_level'),
     account_device: require('./account_device'),
     locator: require('./locator'),
-    cuti: require('./cuti')
+    cuti_request: require('./cuti_request'),
+    cuti_type: require('./cuti_type'),
+    profile: require('./profile'),
+    role: require('./role'),
 };
 
 

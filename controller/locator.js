@@ -25,7 +25,7 @@ controller.getAll = async function(req, res) {
                     "metaData": {
                         "message": "Success",
                         "code": 201,
-                        "response_code": "12345"
+                        "response_code": "201"
                     }
                 });
 
@@ -36,7 +36,7 @@ controller.getAll = async function(req, res) {
                     "metaData": {
                         "message": "Success",
                         "code": 200,
-                        "response_code": "12345"
+                        "response_code": "200"
                     }
                 });
 
@@ -54,12 +54,12 @@ controller.getById = async function(req, res) {
     const resultErrors = validationResult(req);
 
     if (!resultErrors.isEmpty()) {
-        res.json({
+        res.status(201).json({
             "response": resultErrors,
             "metaData": {
                 "message": "Data not found",
                 "code": 201,
-                "response_code": "12345"
+                "response_code": "201"
             }
         });
 
@@ -74,7 +74,7 @@ controller.getById = async function(req, res) {
                 "metaData": {
                     "message": "Success",
                     "code": 200,
-                    "response_code": "12345"
+                    "response_code": "200"
                 }
             });
 
@@ -101,8 +101,8 @@ controller.insertData = async function(req, res) {
         langitude: dataInsert.langitude,
         use_location: dataInsert.use_location,
         status_locator: dataInsert.status_locator,
-        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
-        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        datetime_created: moment().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -124,8 +124,8 @@ controller.insertData = async function(req, res) {
             "response": resultErrors,
             "metaData": {
                 "message": "Gagal menambahkan data",
-                "code": "422",
-                "response_code": "12345"
+                "code": 422,
+                "response_code": "422"
             }
         });
 
@@ -145,8 +145,8 @@ controller.insertData = async function(req, res) {
                 },
                 "metaData": {
                     "message": "Berhasil menambahkan data",
-                    "code": "201",
-                    "response_code": "12345"
+                    "code": 201,
+                    "response_code": "201"
                 }
             });
             
@@ -165,12 +165,12 @@ controller.delete = async function(req, res) {
 
     // invalid/id not found
     if (!resultErrors.isEmpty()) {
-        res.json({
+        res.status(201).json({
             "response": resultErrors,
             "metaData": {
                 "message": "Tidak dapat menghapus data",
                 "code": 201,
-                "response_code": "12345"
+                "response_code": "201"
             }
         });
 
@@ -185,8 +185,8 @@ controller.delete = async function(req, res) {
                     "response": [],
                     "metaData": {
                         "message": "Berhasil menghapus data",
-                        "code": "200",
-                        "response_code": "12345"
+                        "code": 200,
+                        "response_code": "200"
                     }
                 });
 
@@ -196,8 +196,8 @@ controller.delete = async function(req, res) {
                     "response": [],
                     "metaData": {
                         "message": "Gagal menghapus data",
-                        "code": "200",
-                        "response_code": "12345"
+                        "code": 200,
+                        "response_code": "200"
                     }
                 });
 
@@ -225,7 +225,7 @@ controller.update = async function(req, res) {
         langitude: dataInsert.langitude,
         use_location: dataInsert.use_location,
         status_locator: dataInsert.status_locator,
-        datetime_edited: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        datetime_edited: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -246,8 +246,8 @@ controller.update = async function(req, res) {
             "response": resultErrors,
             "metaData": {
                 "message": "Gagal mengubah data",
-                "code": "422",
-                "response_code": "12345"
+                "code": 422,
+                "response_code": "422"
             }
         });
 
@@ -279,7 +279,7 @@ controller.update = async function(req, res) {
                     "metaData": {
                         "message": "Berhasil mengubah data",
                         "code": 200,
-                        "response_code": "12345"
+                        "response_code": "200"
                     }
                 });
 
@@ -290,7 +290,7 @@ controller.update = async function(req, res) {
                     "metaData": {
                         "message": "Gagal mengubah data",
                         "code": 422,
-                        "response_code": "12345"
+                        "response_code": "422"
                     }
                 });
 

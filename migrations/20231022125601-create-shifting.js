@@ -29,11 +29,11 @@ module.exports = {
         defaultValue: "OTH"
       },
       shift_start: {
-        type: Sequelize.DATE,
+        type: Sequelize.TIME,
         defaultValue: null
       },
       shift_end: {
-        type: Sequelize.DATE,
+        type: Sequelize.TIME,
         defaultValue: null
       },
       status_shifting: {

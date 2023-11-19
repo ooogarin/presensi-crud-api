@@ -10,12 +10,6 @@ router.get('/',
     authLogin,
 controller.account_level.getAll);
 
-// GET - by id
-router.get('/:id',
-    authLogin,
-    validationRules.account_level.getDataById,
-controller.account_level.getById);
-
 // POST
 router.post('/',
     authLogin,
@@ -25,7 +19,7 @@ controller.account_level.insertData);
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.account_level.deleteById,
+    validationRules.account_level.findId,
 controller.account_level.delete);
 
 // PUT

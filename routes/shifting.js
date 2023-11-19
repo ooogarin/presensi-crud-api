@@ -13,8 +13,8 @@ controller.shifting.getAll);
 // GET - by id
 router.get('/:id',
     authLogin,
-    validationRules.shifting.getDataById,
-controller.shifting.getById);
+    validationRules.shifting.findId,
+controller.shifting.getDetilShifting);
 
 // POST
 router.post('/',
@@ -25,7 +25,7 @@ controller.shifting.insertData);
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.shifting.deleteById,
+    validationRules.shifting.findId,
 controller.shifting.delete);
 
 // PUT

@@ -10,7 +10,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // from account
+      cuti.belongsTo(models.account, {
+        foreignKey: 'id_account',
+        as: 'account'
+      });
+
+      // from cuti_type
+      cuti.belongsTo(models.cuti_type, {
+        foreignKey: 'id_cuti_type',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        as: 'cuti_type'
+      });
     }
   }
   cuti.init({
@@ -22,16 +34,37 @@ module.exports = (sequelize, DataTypes) => {
     id_account: {
       type: DataTypes.UUID
     },
+    cuti_start: {
+      type: DataTypes.DATEONLY,
+      defaultValue: null
+    },
+    cuti_end: {
+      type: DataTypes.DATEONLY,
+      defaultValue: null
+    },
+    id_cuti_type: {
+      type: DataTypes.UUID,
+    },
     cuti_description: {
-      type: DataTypes.STRING(200)
+      type: DataTypes.TEXT,
+      defaultValue: '-'
+    },
+    cuti_response: {
+      type: DataTypes.TEXT,
+      defaultValue: '-'
+    },
+    status_cuti: {
+      type: DataTypes.ENUM("WAIT", "ACC", "REJECT"),
+      allowNull: false,
+      defaultValue: "WAIT"
     },
     datetime_created: {
-      allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      allowNull: false
     },
     datetime_edited: {
-      allowNull: false,
-      type: DataTypes.DATE
+      type: DataTypes.DATE,
+      allowNull: false
     }
   }, {
     sequelize,

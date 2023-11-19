@@ -28,8 +28,6 @@ validationRules.insertData = [
     body('release_vesion').exists().trim().notEmpty().withMessage("release_vesion tidak sesuai"),
     body('sdk_version').exists().trim().notEmpty().withMessage("sdk_version tidak sesuai"),
     body('app_version').exists().trim().notEmpty().withMessage("app_version tidak sesuai"),
-    // body('createdAt').exists().trim().notEmpty().withMessage("createdAt tidak sesuai"),
-    // body('updatedAt').exists().trim().notEmpty().withMessage("updatedAt tidak sesuai")
 ];
 
 // DELETE - delete by id
@@ -52,8 +50,6 @@ validationRules.updateById = [
     body('release_vesion').exists().trim().notEmpty().withMessage("release_vesion tidak sesuai"),
     body('sdk_version').exists().trim().notEmpty().withMessage("sdk_version tidak sesuai"),
     body('app_version').exists().trim().notEmpty().withMessage("app_version tidak sesuai"),
-    // body('createdAt').exists().trim().notEmpty().withMessage("createdAt tidak sesuai"),
-    // body('updatedAt').exists().trim().notEmpty().withMessage("updatedAt tidak sesuai")
 ];
 
 module.exports = validationRules;

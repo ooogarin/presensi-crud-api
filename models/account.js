@@ -1,7 +1,8 @@
 'use strict';
 const {
-  Model
+  Model, Sequelize
 } = require('sequelize');
+const cuti_type = require('./cuti_type');
 module.exports = (sequelize, DataTypes) => {
   class account extends Model {
     /**
@@ -10,7 +11,28 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // to schedule
+      account.hasMany(models.schedule, {
+        foreignKey: 'id_account'
+      });
+      
+      // to attendance
+      account.hasMany(models.attendance, {
+        foreignKey: 'id_account',
+      });
+
+      // to cuti
+      account.hasMany(models.cuti, {
+        foreignKey: 'id_account'
+      });
+
+      // from role
+      account.belongsTo(models.role, {
+        foreignKey: 'id_role',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+        as: 'role'
+      });
     }
   }
   account.init({
@@ -19,7 +41,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       primaryKey: true
     },
-    name_user: {
+    sname_user: {
+      type: DataTypes.STRING(20)
+    },
+    lname_user: {
       type: DataTypes.STRING(45),
       allowNull: false
     },
@@ -43,6 +68,9 @@ module.exports = (sequelize, DataTypes) => {
     id_account_level: {
       type: DataTypes.INTEGER(1),
       allowNull: false
+    },
+    id_role: {
+      type: DataTypes.UUID
     },
     status_account: {
       type: DataTypes.ENUM("ACT", "NACT"),
@@ -79,8 +107,5 @@ module.exports = (sequelize, DataTypes) => {
     freezeTableName: true,
     timestamps: false
   });
-
-  // sequelize.sync({ force: false });
-
   return account;
 };

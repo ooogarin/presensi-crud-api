@@ -10,13 +10,7 @@ router.get('/',
     authLogin,
 controller.division.getAll);
 
-// GET - by id
-router.get('/:id',
-    authLogin,
-    validationRules.division.getDataById,
-controller.division.getById);
-
-// POST
+// POST - create division
 router.post('/',
     authLogin,
     validationRules.division.insertData,
@@ -25,7 +19,7 @@ controller.division.insertData);
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.division.deleteById,
+    validationRules.division.findId,
 controller.division.delete);
 
 // PUT

@@ -8,7 +8,11 @@ module.exports = {
         allowNull: false,
         primaryKey: true
       },
-      name_user: {
+      sname_user: {
+        type: Sequelize.STRING(20),
+        allowNull: false
+      },
+      lname_user: {
         type: Sequelize.STRING(45),
         allowNull: false
       },
@@ -32,6 +36,10 @@ module.exports = {
       id_account_level: {
         type: Sequelize.INTEGER(1),
         allowNull: false
+      },
+      role: {
+        type: Sequelize.STRING(45),
+        defaultValue: "-"
       },
       status_account: {
         type: Sequelize.ENUM("ACT", "NACT"),

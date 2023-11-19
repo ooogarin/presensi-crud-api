@@ -2,7 +2,7 @@
 var express = require('express');
 const bodyParser = require('body-parser');
 const { v4: uuidv4 } = require('uuid');
-const { shifting } = require('../models');
+const { shifting, shift_turn, shift_type, division  } = require('../models');
 const { validationResult } = require('express-validator');
 const moment = require('moment');
 
@@ -16,7 +16,26 @@ const controller = {};
 // get all
 controller.getAll = async function(req, res) {
     try {
-        await shifting.findAll()
+        await shifting.findAll({
+            attributes: ['id_shifting', 'shift_start', 'shift_end', 'status_shifting', 'datetime_created', 'datetime_edited'],
+            include: [
+                {
+                    model: division,
+                    as: 'division',
+                    attributes: ['division_sname']
+                },
+                {
+                    model: shift_turn,
+                    as: 'shifting_shift_turn',
+                    attributes: ['turn_lname']
+                },
+                {
+                    model: shift_type,
+                    as: 'shifting_shift_type',
+                    attributes: ['type_sname']
+                }
+            ]
+        })
         .then((result) => {
             // check empty result
             if (result.length == 0) {
@@ -25,7 +44,7 @@ controller.getAll = async function(req, res) {
                     "metaData": {
                         "message": "Success",
                         "code": 201,
-                        "response_code": "12345"
+                        "response_code": "201"
                     }
                 });
 
@@ -36,7 +55,7 @@ controller.getAll = async function(req, res) {
                     "metaData": {
                         "message": "Success",
                         "code": 200,
-                        "response_code": "12345"
+                        "response_code": "200"
                     }
                 });
 
@@ -48,18 +67,18 @@ controller.getAll = async function(req, res) {
     }
 }
 
-// get by id
-controller.getById = async function(req, res) {
+// get detil
+controller.getDetilShifting = async function(req, res) {
     const id = req.params.id;
     const resultErrors = validationResult(req);
 
     if (!resultErrors.isEmpty()) {
-        res.json({
+        res.status(201).json({
             "response": resultErrors,
             "metaData": {
                 "message": "Data not found",
                 "code": 201,
-                "response_code": "12345"
+                "response_code": "201"
             }
         });
 
@@ -67,14 +86,33 @@ controller.getById = async function(req, res) {
     }
 
     try {
-        await shifting.findByPk(id)
+        await shifting.findByPk(id, {
+            attributes: ['id_shifting', 'shift_start', 'shift_end', 'status_shifting', 'datetime_created', 'datetime_edited'],
+            include: [
+                {
+                    model: division,
+                    as: 'division',
+                    attributes: ['division_sname']
+                },
+                {
+                    model: shift_turn,
+                    as: 'shifting_shift_turn',
+                    attributes: ['turn_lname']
+                },
+                {
+                    model: shift_type,
+                    as: 'shifting_shift_type',
+                    attributes: ['type_sname']
+                }
+            ]
+        })
         .then((data) => {
             res.status(200).json({
                 "response": data,
                 "metaData": {
                     "message": "Success",
                     "code": 200,
-                    "response_code": "12345"
+                    "response_code": "200"
                 }
             });
 
@@ -94,16 +132,14 @@ controller.insertData = async function(req, res) {
     // input data
     const data = {
         id_shifting: uuidv4(),
-        id_division : dataInsert.id_division,
-        id_shift_type : dataInsert.id_shift_type,
-        shift_type : dataInsert.shift_type,
-        id_shift_turn : dataInsert.id_shift_turn,
-        shift_turn : dataInsert.shift_turn,
-        shift_start : dataInsert.shift_start,
-        shift_end : dataInsert.shift_end,
+        id_division: dataInsert.id_division,
+        id_shift_type: dataInsert.id_shift_type,
+        id_shift_turn: dataInsert.id_shift_turn,
+        shift_start: dataInsert.shift_start,
+        shift_end: dataInsert.shift_end,
         status_shifting: dataInsert.status_shifting,
-        datetime_created: moment().utc().format('YYYY-MM-DD HH:mm:ss'),
-        datetime_updated: moment().utc().format('YYYY-MM-DD HH:mm:ss') 
+        datetime_created: moment().format('YYYY-MM-DD HH:mm:ss'),
+        datetime_edited: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -114,20 +150,18 @@ controller.insertData = async function(req, res) {
                 "id_shifting": `${data.id_shifting}`,
                 "id_division" :`${ data.id_division}`,
                 "id_shift_type" :`${ data.id_shift_type}`,
-                "shift_type" :`${ data.shift_type}`,
                 "id_shift_turn" :`${ data.id_shift_turn}`,
-                "shift_turn" :`${ data.shift_turn}`,
                 "shift_start" :`${ data.shift_start}`,
                 "shift_end" :`${ data.shift_end}`,
                 "status_shifting": `${data.status_shifting}`,
                 "datetime_created": `${data.datetime_created}`,
-                "datetime_updated": `${data.datetime_updated}` 
+                "datetime_edited": `${data.datetime_edited}` 
             },
             "response": resultErrors,
             "metaData": {
                 "message": "Gagal menambahkan data",
-                "code": "422",
-                "response_code": "12345"
+                "code": 422,
+                "response_code": "422"
             }
         });
 
@@ -141,14 +175,12 @@ controller.insertData = async function(req, res) {
             // send response success
             res.status(201).json({
                 "response": {
-                    "data": [
-                        data
-                    ]
+                    "data": [ data ]
                 },
                 "metaData": {
                     "message": "Berhasil menambahkan data",
-                    "code": "201",
-                    "response_code": "12345"
+                    "code": 201,
+                    "response_code": "201"
                 }
             });
             
@@ -156,6 +188,7 @@ controller.insertData = async function(req, res) {
         });
     } catch (error) {
         console.error(`Error : ${error}`);
+        res.send(`Error : ${error}`);
     }
 
 };
@@ -167,12 +200,12 @@ controller.delete = async function(req, res) {
 
     // invalid/id not found
     if (!resultErrors.isEmpty()) {
-        res.json({
+        res.status(201).json({
             "response": resultErrors,
             "metaData": {
                 "message": "Tidak dapat menghapus data",
                 "code": 201,
-                "response_code": "12345"
+                "response_code": "201"
             }
         });
 
@@ -187,8 +220,8 @@ controller.delete = async function(req, res) {
                     "response": [],
                     "metaData": {
                         "message": "Berhasil menghapus data",
-                        "code": "200",
-                        "response_code": "12345"
+                        "code": 200,
+                        "response_code": "200"
                     }
                 });
 
@@ -198,8 +231,8 @@ controller.delete = async function(req, res) {
                     "response": [],
                     "metaData": {
                         "message": "Gagal menghapus data",
-                        "code": "200",
-                        "response_code": "12345"
+                        "code": 200,
+                        "response_code": "200"
                     }
                 });
 
@@ -222,13 +255,11 @@ controller.update = async function(req, res) {
     const data = {
         id_division : dataInsert.id_division,
         id_shift_type : dataInsert.id_shift_type,
-        shift_type : dataInsert.shift_type,
         id_shift_turn : dataInsert.id_shift_turn,
-        shift_turn : dataInsert.shift_turn,
         shift_start : dataInsert.shift_start,
         shift_end : dataInsert.shift_end,
         status_shifting: dataInsert.status_shifting,
-        datetime_updated: moment().utc().format('YYYY-MM-DD HH:mm:ss')
+        datetime_edited: moment().format('YYYY-MM-DD HH:mm:ss')
     };
 
     // invalid
@@ -239,19 +270,17 @@ controller.update = async function(req, res) {
                 "id_shifting": `${id}`,
                 "id_division" :`${ data.id_division}`,
                 "id_shift_type" :`${ data.id_shift_type}`,
-                "shift_type" :`${ data.shift_type}`,
                 "id_shift_turn" :`${ data.id_shift_turn}`,
-                "shift_turn" :`${ data.shift_turn}`,
                 "shift_start" :`${ data.shift_start}`,
                 "shift_end" :`${ data.shift_end}`,
                 "status_shifting": `${data.status_shifting}`,
-                "datetime_updated": `${data.datetime_updated}`
+                "datetime_edited": `${data.datetime_edited}`
             },
             "response": resultErrors,
             "metaData": {
                 "message": "Gagal mengubah data",
-                "code": "422",
-                "response_code": "12345"
+                "code": 422,
+                "response_code": "422"
             }
         });
 
@@ -261,7 +290,7 @@ controller.update = async function(req, res) {
     // input valid
     try {
         await shifting.update(data, { where: { id_shifting: `${id}` } })
-        .then(([affectedRows, result]) => {
+        .then((affectedRows) => {
             if (affectedRows >= 1) { // berhasil
                 res.status(200).json({
                     "response": {
@@ -270,21 +299,18 @@ controller.update = async function(req, res) {
                                 "id_shifting": `${id}`,
                                 "id_division" :`${ data.id_division}`,
                                 "id_shift_type" :`${ data.id_shift_type}`,
-                                "shift_type" :`${ data.shift_type}`,
                                 "id_shift_turn" :`${ data.id_shift_turn}`,
-                                "shift_turn" :`${ data.shift_turn}`,
                                 "shift_start" :`${ data.shift_start}`,
                                 "shift_end" :`${ data.shift_end}`,
                                 "status_shifting": `${data.status_shifting}`,
-                                "datetime_updated": `${data.datetime_updated}`
+                                "datetime_edited": `${data.datetime_edited}`
                             }
-                        ],
-                        "result": result
+                        ]
                     },
                     "metaData": {
                         "message": "Berhasil mengubah data",
                         "code": 200,
-                        "response_code": "12345"
+                        "response_code": "200"
                     }
                 });
 
@@ -295,7 +321,7 @@ controller.update = async function(req, res) {
                     "metaData": {
                         "message": "Gagal mengubah data",
                         "code": 422,
-                        "response_code": "12345"
+                        "response_code": "422"
                     }
                 });
 

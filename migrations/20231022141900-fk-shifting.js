@@ -28,6 +28,19 @@ module.exports = {
       onDelete: 'NO ACTION',
       onUpdate: 'CASCADE'
     });
+
+    // fk id_shift_turn
+    await queryInterface.addConstraint('shifting', {
+      fields: ['id_shift_turn'],
+      type: 'foreign key',
+      name: 'fk_shifting-id_shift_turn',
+      references: {
+        table: 'shift_turn',
+        field: 'id_shift_turn'
+      },
+      onDelete: 'NO ACTION',
+      onUpdate: 'CASCADE'
+    });
   },
 
   async down (queryInterface, Sequelize) {
@@ -36,5 +49,8 @@ module.exports = {
 
     // fk id_shift_type
     await queryInterface.removeConstraint('shifting', 'fk_shifting-id_shift_type');
+
+    // fk id_shift_turn
+    await queryInterface.removeConstraint('shifting', 'fk_shifting-id_shift_turn');
   }
 };

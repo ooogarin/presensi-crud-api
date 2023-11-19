@@ -17,7 +17,7 @@ module.exports = {
         allowNull: false
       },
       shift_schedule: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
         allowNull: false
       },
       status_schedule: {

@@ -5,16 +5,34 @@ const validationRules = require('../config/validation/index');
 const authLogin = require('../config/middlewares/isLogin');
 
 
+// GET - all schedule
+router.get('/schedule',
+    authLogin,
+controller.schedule.getAllSchedule);
+
+
+// ----------------------------------------------------------------------------------------------------
+// get shifting (shift turn, shift type)
+router.get('/shifting',
+    authLogin,
+controller.schedule.getShifting);
+
+// get division
+router.get('/division',
+    authLogin,
+controller.schedule.getDivision);
+
+// ----------------------------------------------------------------------------------------------------
 // GET - all
 router.get('/',
     authLogin,
 controller.schedule.getAll);
 
-// GET - by id
+// GET - detil by id
 router.get('/:id',
     authLogin,
-    validationRules.schedule.getDataById,
-controller.schedule.getById);
+    validationRules.schedule.findId,
+controller.schedule.getDetilSchedule);
 
 // POST
 router.post('/',
@@ -25,7 +43,7 @@ controller.schedule.insertData);
 // DELETE - by id
 router.delete('/:id',
     authLogin,
-    validationRules.schedule.deleteById,
+    validationRules.schedule.delete,
 controller.schedule.delete);
 
 // PUT

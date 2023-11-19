@@ -50,11 +50,21 @@ module.exports = {
       },
       reason: {
         type: Sequelize.TEXT,
-        defaultValue: null
+        defaultValue: "-"
+      },
+      attendance_start: {
+        type: Sequelize.TIME,
+      },
+      attendance_finish: {
+        type: Sequelize.TIME,
+      },
+      status_attendance: {
+        type: Sequelize.STRING(30),
+        defaultValue: '-'
       },
       date_attend: {
         type: Sequelize.DATE,
-        allowNull: null
+        allowNull: false
       },
       datetime_record: {
         type: Sequelize.DATE,
